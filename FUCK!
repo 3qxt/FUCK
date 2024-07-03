@@ -43,58 +43,40 @@ local Button1 = Tab1:NewButton("AZURE MODDED", function()
 end)
 
 local Button1 = Tab1:NewButton("resolver", function()
-          		-- // aiming version!
-local CPlayer = Aiming.Selected
-local hrp = CPlayer.Character.HumanoidRootPart
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Y, hrp.Velocity.Z)    
-                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Y, hrp.Velocity.Z)
-  	end    
-})
-Other:AddButton({
-	Name = "Resolver (kinda laggy)",
-	Callback = function()
-      		 getgenv().VelocityChanger = true
-getgenv().Velocity = Vector3.new(200,0,200)
+local RunService = game:GetService("RunService")
 
-
---// main scapt | realkscapter... omg
-local Players     = game:GetService("Players")
-local RunService  = game:GetService("RunService")
-
-local LocalPlayer = Players.LocalPlayer
-local Character   = LocalPlayer.Character
-local RootPart    = Character:FindFirstChild("HumanoidRootPart")
-
-local Heartbeat, RStepped, Stepped = RunService.Heartbeat, RunService.RenderStepped, RunService.Stepped
-
-LocalPlayer.CharacterAdded:Connect(function(NewCharacter)
-   Character = NewCharacter
-end)
-
-local RVelocity, YVelocity = nil, 0.1
-
-while true do
-   if VelocityChanger then
-       --// this a dumb check asnilsadsa
-       if (not RootPart) or (not RootPart.Parent) or (not RootPart.Parent.Parent) then
-           warn("weird ahh died")
-           RootPart = Character:FindFirstChild("HumanoidRootPart")
-       else
-           RVelocity = RootPart.Velocity
-   
-           RootPart.Velocity = type(Velocity) == "vector" and Velocity or Velocity(RVelocity)
-       
-           RStepped:wait()
-       
-           RootPart.Velocity = RVelocity
-       end
-   end
-   
-   Heartbeat:wait()
+local function zeroOutYVelocity(hrp)
+    hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+    hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
 end
+
+local function onPlayerAdded(player)
+    player.CharacterAdded:Connect(function(character)
+        local hrp = character:WaitForChild("HumanoidRootPart")
+        zeroOutYVelocity(hrp)
+    end)
+end
+
+local function onPlayerRemoving(player)
+    player.CharacterAdded:Disconnect()
+end
+
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+game.Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+RunService.Heartbeat:Connect(function()
+    pcall(function()
+        for i, player in pairs(game.Players:GetChildren()) do
+            if player.Name ~= game.Players.LocalPlayer.Name then
+                local hrp = player.Character.HumanoidRootPart
+                zeroOutYVelocity(hrp)
+            end
+        end
+    end)
+end)
 end)
 
-local Button1 = Tab1:NewButton("Camlock", function()
+local Button1 = Tab1:NewButton("Camlock Q", function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/vKoku/kaz/main/dh'))()
 end)
 
