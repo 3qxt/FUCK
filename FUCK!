@@ -33,7 +33,7 @@ local Label1 = Tab1:NewLabel("SPORT GAMES", "center")--"left", "center", "right"
 
 
 local Button1 = Tab1:NewButton("FBF2", function()
-    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/bc2d4cf963197247f6ad8df82ee73817.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Forexium/Yon/main/Free.lua"))()
 end)
 
 local Label1 = Tab1:NewLabel("DA HOOD SHIT", "center")
